@@ -1,0 +1,45 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+
+# IDE
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Local environment files (NEVER COMMIT THESE!)
+.env
+.env.local
+local.env
+application-dev.properties
+application-local.properties
+
+# Google credentials
+credentials.json
+service-account-key.json
+
+# Telegram session files
+telegram-session*
+*.session
+
+# Local storage files
+job_listings.*
+*.csv
+*.json
+*.db

@@ -1,0 +1,46 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# Local environment files
+.env
+.env.local
+local.env
+application-dev.properties
+application-local.properties
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Maven target directory (we'll build inside Docker)
+target/
+
+# Logs
+logs/
+*.log
+
+# Local storage files
+job_listings.*
+*.csv
+*.json
+*.db
+
+# Google credentials
+credentials.json
+service-account-key.json
+
+# Telegram session files
+telegram-session*
+*.session

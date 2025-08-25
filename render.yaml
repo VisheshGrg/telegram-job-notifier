@@ -1,0 +1,47 @@
+# Render Blueprint for Docker deployment
+services:
+  - type: web
+    name: telegram-notifier
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      # Telegram Configuration
+      - key: APP_TELEGRAM_API_ID
+        sync: false  # You'll set this manually in Render dashboard
+      - key: APP_TELEGRAM_API_HASH
+        sync: false
+      - key: APP_TELEGRAM_PHONE_NUMBER
+        sync: false
+      
+      # AI Configuration
+      - key: APP_AI_GEMINI_API_KEY
+        sync: false
+      - key: APP_AI_GEMINI_MODEL
+        value: gemini-2.0-flash
+      - key: APP_AI_GEMINI_RATE_LIMIT_DELAY_SECONDS
+        value: "10"
+      
+      # Notion Configuration
+      - key: APP_NOTION_INTEGRATION_TOKEN
+        sync: false
+      - key: APP_NOTION_DATABASE_ID
+        sync: false
+      - key: APP_NOTION_VERSION
+        value: "2022-06-28"
+      
+      # Storage Configuration
+      - key: APP_STORAGE_TYPE
+        value: notion
+      
+      # Channels Configuration
+      - key: APP_TELEGRAM_CHANNELS
+        value: "@ravi_kumar_gupta,@jobs_and_internships_updates,@jobb_test_posts"
+      - key: APP_TELEGRAM_POLL_INTERVAL_MINUTES
+        value: "30"
+      
+      # Spring Boot Configuration
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: SERVER_PORT
+        value: "8080"

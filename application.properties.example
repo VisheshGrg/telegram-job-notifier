@@ -1,0 +1,28 @@
+# Telegram Job Notifier Configuration Example
+# Copy this file to application.properties and fill in your actual values
+
+spring.application.name=telegram-notifier
+
+# Telegram Client Configuration
+# Get these from https://my.telegram.org/apps
+app.telegram.api-id=12345678
+app.telegram.api-hash=your_32_character_api_hash_here
+app.telegram.phone-number=+1234567890
+
+# Channels to monitor (comma-separated, include @ symbol)
+app.telegram.channels=@remotejobs,@jobsearch,@backendjobs
+app.telegram.poll-interval-minutes=30
+app.telegram.session-file=telegram-session
+
+# Google Gemini AI Configuration
+# Get API key from https://aistudio.google.com/
+app.ai.gemini.api-key=your_gemini_api_key_here
+app.ai.gemini.model=gemini-1.5-flash
+app.ai.gemini.relevance-prompt=You are a strict filter for job posts relevant to a Software Engineer / Backend / Java / Spring Boot developer (0-3 years). Return EXACTLY "YES" if relevant, otherwise "NO".
+
+# Google Sheets Configuration
+# Spreadsheet ID is in the URL: https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit
+app.sheets.spreadsheet-id=your_google_spreadsheet_id_here
+app.sheets.sheet-range=Sheet1!A:H
+app.sheets.credentials-path=credentials.json
+
