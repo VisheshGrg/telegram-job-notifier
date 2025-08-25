@@ -337,7 +337,11 @@ public class TelegramService {
             return Collections.emptyList();
         }
         
-        return Arrays.asList(channelsConfig.split(","));
+        // Clean up the channel list: remove quotes, trim whitespace
+        return Arrays.stream(channelsConfig.split(","))
+                .map(channel -> channel.trim().replaceAll("^\"|\"$", "")) // Remove leading/trailing quotes
+                .filter(channel -> !channel.isEmpty())
+                .collect(java.util.stream.Collectors.toList());
     }
 
     public Map<String, Object> getServiceStatus() {
