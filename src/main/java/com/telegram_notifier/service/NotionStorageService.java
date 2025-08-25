@@ -47,11 +47,18 @@ public class NotionStorageService {
     }
 
     public void saveJob(JobDetails jobDetails) {
+        saveJob(jobDetails, null);
+    }
+    
+    public void saveJob(JobDetails jobDetails, String resumeLink) {
         try {
             log.info("💾 Saving job to Notion: {} - {}", jobDetails.getCompany(), jobDetails.getRole());
+            if (resumeLink != null) {
+                log.info("🔗 Including resume link: {}", resumeLink);
+            }
             
             // Create JSON payload for Notion API
-            ObjectNode payload = createNotionPayload(jobDetails);
+            ObjectNode payload = createNotionPayload(jobDetails, resumeLink);
             
             // Send POST request to Notion API
             String response = webClient
@@ -76,6 +83,10 @@ public class NotionStorageService {
     }
 
     private ObjectNode createNotionPayload(JobDetails jobDetails) {
+        return createNotionPayload(jobDetails, null);
+    }
+    
+    private ObjectNode createNotionPayload(JobDetails jobDetails, String resumeLink) {
         ObjectNode payload = objectMapper.createObjectNode();
         
         // Set parent database
@@ -143,6 +154,13 @@ public class NotionStorageService {
             properties.set("Raw Snippet", createRichTextProperty(snippet));
         }
         
+        // Resume Link (URL field)
+        if (resumeLink != null && !resumeLink.isEmpty()) {
+            ObjectNode resumeProp = objectMapper.createObjectNode();
+            resumeProp.put("url", resumeLink);
+            properties.set("Resume Link", resumeProp);
+        }
+        
         payload.set("properties", properties);
         
         return payload;
@@ -168,6 +186,7 @@ public class NotionStorageService {
         log.info("   - Source (Text)");
         log.info("   - Posted Date (Date)");
         log.info("   - Raw Snippet (Text)");
+        log.info("   - Resume Link (URL) - NEW for resume generation");
         log.info("✅ If columns are missing, add them to your Notion database");
     }
 

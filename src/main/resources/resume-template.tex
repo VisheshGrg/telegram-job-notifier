@@ -1,0 +1,283 @@
+
+
+\documentclass[a4paper,11pt]{article}
+\usepackage{latexsym}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{ragged2e}
+\usepackage[empty]{fullpage}
+\usepackage{wrapfig}
+\usepackage{lipsum}
+\usepackage{tabularx}
+\usepackage{titlesec}
+\usepackage{geometry}
+\usepackage{marvosym}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{cfr-lm}
+\usepackage[T1]{fontenc}
+\setlength{\multicolsep}{0pt} 
+\pagestyle{fancy}
+\fancyhf{} 
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\geometry{left=0.9cm, top=0.8cm, right=0.6cm, bottom=0.8cm}
+\usepackage[most]{tcolorbox}
+\tcbset{
+	frame code={}
+	center title,
+	left=0pt,
+	right=0pt,
+	top=0pt,
+	bottom=0pt,
+	colback=gray!20,
+	colframe=white,
+	width=\dimexpr\textwidth\relax,
+	enlarge left by=-2mm,
+	boxsep=4pt,
+	arc=0pt,outer arc=0pt,
+}
+
+\urlstyle{same}
+
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-10pt}\scshape\raggedright\large
+}{}{0em}{
+  \begin{tcolorbox}[colback=gray!10, boxrule=0.2mm, sharp corners=all, boxsep=0pt]
+    \textcolor{black}{\thesection} \ \textcolor{black}{#1}
+  \end{tcolorbox}
+  \color{black}\titlerule \vspace{-7pt}
+}
+
+%-------------------------
+\newcommand{\resumeItem}[2]{
+  \item{
+    \textbf{#1}{\hspace{0.5mm}#2 \vspace{-0.5mm}}
+  }
+}
+
+\newcommand{\resumeExperience}[5]{
+\vspace{0.5mm}\item
+    \begin{tabular*}{0.98\textwidth}[t]{l@{\extracolsep{\fill}}r}
+        \textbf{#1} & \textit{\footnotesize{#3}} \\
+        \textit{\footnotesize{#2}} & \footnotesize{\textit{#4}} #5
+    \end{tabular*}
+    \vspace{-2.4mm}
+}
+
+\newcommand{\resumePOR}[3]{
+\vspace{0.5mm}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+        \textbf{#1}\hspace{0.3mm}#2 & \textit{\small{#3}} 
+    \end{tabular*}
+    \vspace{-2.4mm}
+}
+
+\newcommand{\resumeSubheading}[4]{
+\vspace{0.5mm}\item
+    \begin{tabular*}{0.98\textwidth}[t]{l@{\extracolsep{\fill}}r}
+        \textbf{#1} & \textit{\footnotesize{#4}} \\
+        \textit{\footnotesize{#3}} &  \footnotesize{#2}\\
+    \end{tabular*}
+    \vspace{-2.4mm}
+}
+
+\newcommand{\resumeProject}[4]{
+\vspace{0.5mm}\item
+    \begin{tabular*}{0.98\textwidth}[t]{l@{\extracolsep{\fill}}r}
+        \textbf{#1} & \textit{\footnotesize{#3}} \\
+        \footnotesize{\textit{#2}} & \footnotesize{#4}
+    \end{tabular*}
+    \vspace{-2.4mm}
+}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+
+\newcommand{\resumeSubItem}[2]{\resumeItem{#1}{#2}\vspace{-4pt}}
+% \renewcommand{\labelitemii}{$\circ$}
+\renewcommand{\labelitemi}{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=*,labelsep=0mm]}
+\newcommand{\resumeHeadingSkillStart}{\begin{itemize}[leftmargin=*,itemsep=1.7mm, rightmargin=2ex]}
+\newcommand{\resumeItemListStart}{\begin{justify}\begin{itemize}[leftmargin=3ex, rightmargin=2ex, noitemsep,labelsep=1.2mm,itemsep=0mm]\small}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}\vspace{2mm}}
+\newcommand{\resumeHeadingSkillEnd}{\end{itemize}\vspace{-2mm}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\end{justify}\vspace{-2mm}}
+\newcommand{\cvsection}[1]{%
+\vspace{2mm}
+\begin{tcolorbox}
+    \textbf{\large #1}
+\end{tcolorbox}
+    \vspace{-4mm}
+}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}%
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}%
+\newcolumntype{C}{>{\centering\arraybackslash}X}%
+%---- End of Packages and Functions ------
+
+%-------------------------------------------
+\newcommand{\name}{Vishesh Garg} % Your Name
+\newcommand{\phone}{9588568012} % Your Phone Number
+\newcommand{\emaila}{gargvishesh95885@gmail.com} % Email Address
+\newcommand{\portfolio}{https://vishesh-garg-portfolio.vercel.app/} % Portfolio Website
+\newcommand{\linkedin}{https://www.linkedin.com/in/vishesh-garg-07580622b/} % LinkedIn Profile
+\newcommand{\github}{https://github.com/VisheshGrg} % LinkedIn Profile
+\newcommand{\college}{ National Institute of Technology, Kuruksehtra} % Your College Name
+
+\begin{document}
+\fontfamily{cmr}\selectfont
+
+%----------HEADING-----------------
+{\Huge \textbf{\name}} \\
+\vspace{8pt}
+{\raisebox{0.0\height}{\footnotesize \faPhone}\ +91-\phone \quad
+\href{mailto:\emaila}{\raisebox{0.0\height}{\footnotesize \faEnvelope}\ {\emaila}} \quad 
+\href{\linkedin}{\raisebox{0.0\height}{\footnotesize \faLinkedin}\ {LinkedIn}} \quad
+\href{\github}{\raisebox{0.0\height}{\footnotesize \faGithub}\ {Github} } \quad
+\href{\portfolio}{\raisebox{0.0\height}{\footnotesize \faUser}\ {Portfolio} }
+    
+\vspace{-2mm}
+
+% {\small{I aspire to join a professionally enriching atmosphere that values the practical application of my knowledge. My goal is to collaborate with experienced professionals, while also attaining expertise in software development-related domains.}
+% }
+%-----------EDUCATION-----------
+% \section{\textbf{Education}}
+\cvsection{Education}
+\resumeItemListStart
+  \item \textbf{B.Tech in Information Technology}, NIT Kurukshetra — CGPA: 9.34 \hfill \textit{2021–2025}
+  \item \textbf{12th Grade}, P.D.M. Public School — Percentage: 95.6\% \hfill \textit{2020–2021}
+  \item \textbf{10th Grade}, P.D.M. Public School — Percentage: 92.0\% \hfill \textit{2018–2019}
+\resumeItemListEnd
+\vspace{-5mm}
+%
+%-----------Positions of Responsibility-----------------
+\cvsection{Experience}
+\resumeSubHeadingListStart
+    \resumeExperience
+      { blackNgreen } % Company Name
+      {Software Developer: Java, Spring Boot, MySQL, AWS, Docker, Redis, Kafka, ELK, Linux, TS, Python} % Job Title and Description
+      {Jan, 2025 - Present} % Date Range
+      {Gurugram, India} % Location
+
+      \resumeItemListStart  
+        \item {Engineered and optimized real-time voice communication systems using VoIP and LLMs, gaining exposure to low-latency architecture and distributed computing.}
+\item {Developed a Facebook Messenger wrapper with Spring Boot and Redis, achieving 10,000+ real-time messages/month with ~30\% lower latency.}
+\item {Designed a scalable, serverless infrastructure using AWS (Lambda, EC2, VPC), improving system throughput and reducing infrastructure cost by 25\%.}
+\item {Built ELK + Kafka pipeline in Docker for high-throughput log aggregation and visualization—boosting debugging efficiency by 45\%.}
+\item{Collaborated in debugging production environments, using Linux tools, logs, and performance profiling to identify bottlenecks.}
+      \resumeItemListEnd
+      \vspace{-2mm}
+
+    \resumeExperience
+      { Ayasya Digital Solutions} % Company Name
+      {Trainee Software Engineer Intern: Java, Spring Boot, JDBC, Maven, Tomcat, MySQL, React} % Job Title and Description
+      {Jan, 2024 - June, 2024} % Date Range
+      {Delhi, India} % Location
+
+      \resumeItemListStart  
+        \item {Spearheaded development of Employee Management System (EMS), streamlining HR workflows and reducing manual processing time by 40\%, serving 500+ employees using Spring Boot and React. }
+        \item {Implemented multiple APIs for backend services including secure registration, punching system, cloud-based document storage.}
+        \item {Built dynamic frontend components using React, delivering seamless UX for features like profile management, salary reports, and document previews.}
+      \resumeItemListEnd
+      \vspace{-3mm}
+      
+\resumeSubHeadingListEnd
+\vspace{-5.5mm}
+
+
+%-----------PROJECTS-----------------
+\cvsection{Projects}
+\resumeSubHeadingListStart
+
+    \resumeProject
+      { Alvira (AI-Powered eCommerce platform) | \textnormal{\small{  TypeScript | Groq | LlamaIndex | Flask | React |}} \small{\href{https://github.com/Alok-jaiswal-075/alvira}{\blue{Github}}}} %Project Name
+      {\space{  } August,2024 - Ongoing} %Project Name, Location Name
+      {} %Event Dates
+
+      \resumeItemListStart
+        \item {Engineered an AI-powered eCommerce platform enabling real-time product discovery and seller interaction using a Retrieval-Augmented Generation (RAG) architecture.}
+        \item {Integrated Groq’s Llama3-8B with LlamaIndex and ChromaDB for fast and contextual product recommendations; added voice support using Web Speech API (TTS/STT).}
+    \resumeItemListEnd
+    \vspace{-2mm}
+
+    \resumeProject
+  { SourceBox (Real-Time Project Collaboration Platform) | \textnormal{\small{Spring Boot | React | Hibernate | RazorPay | MySQL | Tailwind}} \small{\href{https://github.com/VisheshGrg/SourceBox}{\blue{Github}}}}
+  {\space{ } May 2024 - June 2024}
+  {}
+
+  \resumeItemListStart
+    \item {Built a full-stack collaboration platform mimicking real-time trading team environments with task queues, issue tracking, and live commenting.}
+    \item {Optimized API response times using efficient database queries and Hibernate caching, improving system throughput.}
+    \item {Integrated RazorPay for secure transaction simulation, useful for understanding real-world payment pipelines.}
+  \resumeItemListEnd
+  \vspace{-2mm}
+
+    \resumeProject
+      { LogStream (ELK+Kafka Log Monitoring Pipeline) |  \textnormal{\small{Spring Boot | Docker | Kafka | Logstash | Elasticsearch | Kibana}} } %Project Name
+      {\space{  } Feb 2025 - Mar 2025} %Project Name, Location Name
+      {} %Event Dates
+
+      \resumeItemListStart
+        \item {Built a containerized log monitoring pipeline using Kafka and ELK stack for real-time log aggregation across microservices.}
+        \item {Reduced debugging time by 45\% and improved system observability with live Kibana dashboards.}
+        \item {Integrated Spring Boot services with Kafka producers and configured Logstash pipelines for structured log ingestion.}
+    \resumeItemListEnd
+    \vspace{-2mm}
+
+    % \resumeProject
+    %   { CommNet (Real-Time Chat App) | \textnormal{\small{Next.js | Node.js | Express.js | Typescript | SocketIO | Gemini AI |}} \small{\href{https://github.com/VisheshGrg/CommNet}{\blue{Github}}}} %Project Name
+    %   {\space{  } June,2023 - June,2023} %Project Name, Location Name
+    %   {} %Event Dates
+
+    %   \resumeItemListStart
+    %     \item {Leveraged WebSocket via Socket.IO for seamless communication and integrated Gemini API to auto-suggest replies, enhancing user interaction.}
+    %     \item {Designed using Next.js and Express.js for performance, scalability, and server-side rendering.}
+    % \resumeItemListEnd
+    % \vspace{-2mm}
+
+    % \resumeProject
+    %   { SAE NIT KKR Official Website | \textnormal{\small{React |  Node.js | Firebase | RazorPay |}} \small{\href{https://www.saenitkurukshetra.in/}{\blue{Website}}}} %Project Name
+    %   {\space{  } August,2023 - Ongoing} %Project Name, Location Name
+    %   {} %Event Dates
+
+    %   \resumeItemListStart
+    %     \item {Managed and developed the \textbf{official} website of SAE NIT Kurukshetra.}
+    %     \item {Access all SAE NIT KKR information, register for workshops, utilize \textbf{payment gateways}, and submit queries.}
+    % \resumeItemListEnd
+    % \vspace{-2mm}
+      
+  \resumeSubHeadingListEnd
+\vspace{-6mm}
+
+%-----------Technical skills-----------------
+\cvsection{Technical Skills}
+ \begin{itemize}[leftmargin=0.05in, label={}]
+    \small{\item{
+     \textbf{Languages}{: C/C++ Python, Bash, Java, Typescript HTML, CSS} \\
+     \textbf{Framework and Libraries }{: React, Next.js, Node.js, Express.js, Spring Boot, Tailwind, Redux, Typescript, JUnit, Mockito}\\
+     \textbf{Tools/DevOps/System Knowledge}{: Git, Docker, AWS (Lambda, EC2, RDS), Wireshark, SonarQube, ELK, Kafka, Cursor, TCP/IP, Sockets, Shell scripting} \\ 
+     \textbf{Databases}{: MongoDb, MySQL, Redis, Elasticsearch} \\  
+    }}
+ \end{itemize}
+ \vspace{-18pt}
+
+% -----------EXPERIENCE-----------------
+\cvsection{Achievements}
+\begin{itemize}[leftmargin=0.2in]
+  \small{\item {\textbf{Knight} at Leetcode (under \textbf{top 2.5\%} users globally) | \textbf{3 star} at CodeChef}} \vspace{-3mm}
+  \small{\item {Ranked among the \textbf{top 10} college teams in Smart India Hackathon, selected for national level.}} \vspace{-3mm}
+  \small{\item {Rank \textbf{25} in CodeRush Coding Challange hosted by AlgoUniversity  }}  \vspace{-3mm}
+  \small{\item {Rank \textbf{18} in CodeElite powered by PrepBytes in NIT Kurukshetra}} \vspace{-3mm}
+  \small{\item {Ranked among the \textbf{top 20} out of 5 lakh teams in Flipkart Grid 6.0 and \textbf{top 200} out of 4 lakh teams in Grid 5.0. }\vspace{-3mm} 
+\end{itemize}
+\vspace{-3mm}
+
+%-------------------------------------------
+\end{document}

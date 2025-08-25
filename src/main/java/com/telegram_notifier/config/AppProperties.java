@@ -12,6 +12,8 @@ public class AppProperties {
     private Sheets sheets = new Sheets();
     private Notion notion = new Notion();
     private Storage storage = new Storage();
+    private Cloudinary cloudinary = new Cloudinary();
+    private Resume resume = new Resume();
 
     // Getters
     public Telegram getTelegram() { return telegram; }
@@ -19,6 +21,8 @@ public class AppProperties {
     public Sheets getSheets() { return sheets; }
     public Notion getNotion() { return notion; }
     public Storage getStorage() { return storage; }
+    public Cloudinary getCloudinary() { return cloudinary; }
+    public Resume getResume() { return resume; }
 
     // Setters
     public void setTelegram(Telegram telegram) { this.telegram = telegram; }
@@ -26,6 +30,8 @@ public class AppProperties {
     public void setSheets(Sheets sheets) { this.sheets = sheets; }
     public void setNotion(Notion notion) { this.notion = notion; }
     public void setStorage(Storage storage) { this.storage = storage; }
+    public void setCloudinary(Cloudinary cloudinary) { this.cloudinary = cloudinary; }
+    public void setResume(Resume resume) { this.resume = resume; }
 
     public static class Telegram {
         private String apiId = "";
@@ -108,5 +114,28 @@ public class AppProperties {
         public String getFilePath() { return filePath; }
         public void setType(String type) { this.type = type; }
         public void setFilePath(String filePath) { this.filePath = filePath; }
+    }
+    
+    public static class Cloudinary {
+        private String cloudName = "";
+        private String apiKey = "";
+        private String apiSecret = "";
+
+        public String getCloudName() { return cloudName; }
+        public String getApiKey() { return apiKey; }
+        public String getApiSecret() { return apiSecret; }
+        public void setCloudName(String cloudName) { this.cloudName = cloudName; }
+        public void setApiKey(String apiKey) { this.apiKey = apiKey; }
+        public void setApiSecret(String apiSecret) { this.apiSecret = apiSecret; }
+    }
+    
+    public static class Resume {
+        private String templatePath = "resume-template.tex";
+        private boolean generateEnabled = true;
+
+        public String getTemplatePath() { return templatePath; }
+        public boolean isGenerateEnabled() { return generateEnabled; }
+        public void setTemplatePath(String templatePath) { this.templatePath = templatePath; }
+        public void setGenerateEnabled(boolean generateEnabled) { this.generateEnabled = generateEnabled; }
     }
 }

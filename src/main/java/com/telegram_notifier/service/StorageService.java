@@ -62,6 +62,10 @@ public class StorageService {
     }
 
     public void saveJob(JobDetails jobDetails) {
+        saveJob(jobDetails, null);
+    }
+    
+    public void saveJob(JobDetails jobDetails, String resumeLink) {
         String storageType = properties.getStorage().getType().toLowerCase();
         
         try {
@@ -75,9 +79,13 @@ public class StorageService {
                 case "sqlite":
                     sqliteStorageService.appendJob(jobDetails);
                     break;
-                case "notion":
+                            case "notion":
+                if (resumeLink != null) {
+                    notionStorageService.saveJob(jobDetails, resumeLink);
+                } else {
                     notionStorageService.saveJob(jobDetails);
-                    break;
+                }
+                break;
                 case "google-sheets":
                     if (googleSheetService != null) {
                         googleSheetService.append(jobDetails);

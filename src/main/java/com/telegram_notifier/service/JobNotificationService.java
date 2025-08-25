@@ -23,6 +23,7 @@ public class JobNotificationService {
     private final AiService aiService;
     private final ExtractionService extractionService;
     private final StorageService storageService;
+    private final ResumeGenerationService resumeGenerationService;
     private final AppProperties properties;
 
     // Track processing statistics
@@ -33,12 +34,14 @@ public class JobNotificationService {
     public JobNotificationService(TelegramService telegramService, 
                                  AiService aiService, 
                                  ExtractionService extractionService, 
-                                 StorageService storageService, 
+                                 StorageService storageService,
+                                 ResumeGenerationService resumeGenerationService,
                                  AppProperties properties) {
         this.telegramService = telegramService;
         this.aiService = aiService;
         this.extractionService = extractionService;
         this.storageService = storageService;
+        this.resumeGenerationService = resumeGenerationService;
         this.properties = properties;
     }
 
@@ -93,13 +96,32 @@ public class JobNotificationService {
                             // Add timestamp information to job details
                             jobDetails.setPostedDate(telegramMessage.getTimestamp().toLocalDate().toString());
                             
-                            storageService.saveJob(jobDetails);
+                            // Generate resume for this job application
+                            String resumeLink = null;
+                            try {
+                                log.info("📝 Generating custom resume for {} at {}...", jobDetails.getRole(), jobDetails.getCompany());
+                                resumeLink = resumeGenerationService.generateCustomizedResume(jobDetails);
+                                if (resumeLink != null) {
+                                    log.info("✅ Resume generated successfully: {}", resumeLink);
+                                } else {
+                                    log.warn("⚠️ Resume generation failed or disabled for this job");
+                                }
+                            } catch (Exception e) {
+                                log.error("❌ Resume generation failed for {} at {}: {}", 
+                                        jobDetails.getRole(), jobDetails.getCompany(), e.getMessage());
+                                // Continue without resume - don't fail the entire job saving process
+                            }
+                            
+                            storageService.saveJob(jobDetails, resumeLink);
                             savedCount++;
                             
                             log.info("💾 Saved job: {} - {} (from @{})", 
                                     jobDetails.getCompany(), 
                                     jobDetails.getRole(),
                                     telegramMessage.getChannelName());
+                            if (resumeLink != null) {
+                                log.info("🔗 Resume link saved: {}", resumeLink);
+                            }
                         } else {
                             log.warn("⚠️ Failed to extract job details from relevant message from @{}", 
                                     telegramMessage.getChannelName());
@@ -175,7 +197,20 @@ public class JobNotificationService {
                         
                         if (jobDetails != null) {
                             jobDetails.setPostedDate(telegramMessage.getTimestamp().toLocalDate().toString());
-                            storageService.saveJob(jobDetails);
+                            
+                            // Generate resume for this job application
+                            String resumeLink = null;
+                            try {
+                                log.info("📝 Generating custom resume for {} at {}...", jobDetails.getRole(), jobDetails.getCompany());
+                                resumeLink = resumeGenerationService.generateCustomizedResume(jobDetails);
+                                if (resumeLink != null) {
+                                    log.info("✅ Resume generated: {}", resumeLink);
+                                }
+                            } catch (Exception e) {
+                                log.error("❌ Resume generation failed: {}", e.getMessage());
+                            }
+                            
+                            storageService.saveJob(jobDetails, resumeLink);
                             savedCount++;
                         }
                     }
@@ -237,11 +272,27 @@ public class JobNotificationService {
                 
                 if (jobDetails != null) {
                     jobDetails.setPostedDate(LocalDateTime.now().toLocalDate().toString());
-                    storageService.saveJob(jobDetails);
+                    
+                    // Generate resume for this job application
+                    String resumeLink = null;
+                    try {
+                        log.info("📝 Generating custom resume for {} at {}...", jobDetails.getRole(), jobDetails.getCompany());
+                        resumeLink = resumeGenerationService.generateCustomizedResume(jobDetails);
+                        if (resumeLink != null) {
+                            log.info("✅ Resume generated: {}", resumeLink);
+                        }
+                    } catch (Exception e) {
+                        log.error("❌ Resume generation failed: {}", e.getMessage());
+                    }
+                    
+                    storageService.saveJob(jobDetails, resumeLink);
                     
                     result.put("status", "success");
                     result.put("message", "Job details extracted and saved");
                     result.put("job_details", jobDetails);
+                    if (resumeLink != null) {
+                        result.put("resume_link", resumeLink);
+                    }
                     
                     log.info("💾 Manual message processed and saved: {} - {}", 
                             jobDetails.getCompany(), jobDetails.getRole());
