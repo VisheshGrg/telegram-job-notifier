@@ -43,3 +43,5 @@ job_listings.*
 *.csv
 *.json
 *.db
+
+application_bkkp.properties

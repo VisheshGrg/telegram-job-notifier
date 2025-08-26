@@ -66,6 +66,12 @@ public class ResumeGenerationService {
         log.info("🎯 Starting resume generation for {} at {}", jobDetails.getRole(), jobDetails.getCompany());
         
         try {
+            // Add extra delay before resume generation to avoid rate limits
+            // (This is the 3rd consecutive Gemini API call after relevance + extraction)
+            int extraDelay = properties.getAi().getGemini().getRateLimitDelaySeconds();
+            log.info("Adding {} second delay before resume generation to avoid rate limits", extraDelay);
+            Thread.sleep(extraDelay * 1000);
+            
             // Step 1: Customize LaTeX template using AI
             String customizedLatex = customizeResumeWithAI(jobDetails);
             
@@ -101,8 +107,12 @@ public class ResumeGenerationService {
             
             return resumeUrl;
             
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.error("❌ Resume generation interrupted during rate limit delay", e);
+            return null;
         } catch (Exception e) {
-            log.error("❌ Resume generation failed for {} at {}", jobDetails.getRole(), jobDetails.getCompany(), e);
+            log.error("❌ Resume generation failed for {} at {}: {}", jobDetails.getRole(), jobDetails.getCompany(), e.getClass().getSimpleName(), e.getMessage());
             return null;
         }
     }
@@ -116,8 +126,9 @@ public class ResumeGenerationService {
         log.info("🤖 Customizing resume template using AI for {} at {}", jobDetails.getRole(), jobDetails.getCompany());
         
         try {
-            // Add delay to respect rate limits
-            Thread.sleep(properties.getAi().getGemini().getRateLimitDelaySeconds() * 1000);
+            // Note: We already added delay in generateCustomizedResume() method
+            // This is just internal rate limiting within resume generation
+            // Thread.sleep(properties.getAi().getGemini().getRateLimitDelaySeconds() * 1000);
             
             // Build AI prompt for resume customization
             String prompt = buildResumeCustomizationPrompt(jobDetails);
@@ -142,6 +153,9 @@ public class ResumeGenerationService {
                 .bodyToMono(Map.class)
                 .block();
             
+            // Log the full response for debugging
+            log.debug("Gemini API response: {}", response);
+            
             // Extract customized LaTeX from response
             String customizedLatex = extractLatexFromResponse(response);
             
@@ -150,12 +164,17 @@ public class ResumeGenerationService {
                 return customizedLatex;
             } else {
                 log.error("❌ AI returned empty customization result");
+                log.error("Full API response: {}", response);
                 return null;
             }
             
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            log.error("❌ Resume customization interrupted", e);
+        } catch (org.springframework.web.reactive.function.client.WebClientResponseException e) {
+            if (e.getStatusCode().value() == 429) {
+                log.error("❌ Gemini API rate limit exceeded - Status: 429. Consider increasing delay time.");
+                log.error("Current rate limit delay: {}s", properties.getAi().getGemini().getRateLimitDelaySeconds());
+            } else {
+                log.error("❌ Gemini API error - Status: {} - Response: {}", e.getStatusCode(), e.getResponseBodyAsString());
+            }
             return null;
         } catch (Exception e) {
             log.error("❌ AI resume customization failed", e);
@@ -206,20 +225,94 @@ public class ResumeGenerationService {
     @SuppressWarnings("unchecked")
     private String extractLatexFromResponse(Map<String, Object> response) {
         try {
-            Object candidates = response.get("candidates");
-            if (candidates instanceof Object[] && ((Object[]) candidates).length > 0) {
-                Map<String, Object> candidate = (Map<String, Object>) ((Object[]) candidates)[0];
-                Map<String, Object> content = (Map<String, Object>) candidate.get("content");
-                Object parts = content.get("parts");
-                if (parts instanceof Object[] && ((Object[]) parts).length > 0) {
-                    Map<String, Object> part = (Map<String, Object>) ((Object[]) parts)[0];
-                    return (String) part.get("text");
-                }
+            log.debug("Parsing response: {}", response);
+            
+            if (response == null) {
+                log.error("Response is null");
+                return null;
             }
+            
+            Object candidates = response.get("candidates");
+            if (candidates == null) {
+                log.error("No 'candidates' field in response");
+                return null;
+            }
+            
+            // Handle both List and Object[] cases for candidates
+            Map<String, Object> candidate = null;
+            if (candidates instanceof java.util.List) {
+                java.util.List<Object> candidatesList = (java.util.List<Object>) candidates;
+                if (!candidatesList.isEmpty()) {
+                    candidate = (Map<String, Object>) candidatesList.get(0);
+                }
+            } else if (candidates instanceof Object[] && ((Object[]) candidates).length > 0) {
+                candidate = (Map<String, Object>) ((Object[]) candidates)[0];
+            }
+            
+            if (candidate == null) {
+                log.error("No candidates found or candidates list is empty");
+                return null;
+            }
+            
+            Map<String, Object> content = (Map<String, Object>) candidate.get("content");
+            if (content == null) {
+                log.error("No 'content' field in candidate");
+                return null;
+            }
+            
+            Object parts = content.get("parts");
+            if (parts == null) {
+                log.error("No 'parts' field in content");
+                return null;
+            }
+            
+            // Handle both List and Object[] cases for parts
+            Map<String, Object> part = null;
+            if (parts instanceof java.util.List) {
+                java.util.List<Object> partsList = (java.util.List<Object>) parts;
+                if (!partsList.isEmpty()) {
+                    part = (Map<String, Object>) partsList.get(0);
+                }
+            } else if (parts instanceof Object[] && ((Object[]) parts).length > 0) {
+                part = (Map<String, Object>) ((Object[]) parts)[0];
+            }
+            
+            if (part == null) {
+                log.error("No parts found or parts list is empty");
+                return null;
+            }
+            
+            String text = (String) part.get("text");
+            log.debug("Raw text length: {}", text != null ? text.length() : 0);
+            
+            if (text != null) {
+                // Remove markdown code block formatting if present
+                text = text.trim();
+                if (text.startsWith("```latex")) {
+                    text = text.substring(8); // Remove "```latex"
+                } else if (text.startsWith("```")) {
+                    text = text.substring(3); // Remove "```"
+                }
+                
+                if (text.endsWith("```")) {
+                    text = text.substring(0, text.length() - 3); // Remove trailing "```"
+                }
+                
+                text = text.trim();
+                log.debug("Cleaned LaTeX content length: {}", text.length());
+                log.debug("LaTeX starts with: {}", text.length() > 50 ? text.substring(0, 50) + "..." : text);
+                
+                return text;
+            } else {
+                log.error("No 'text' field found in part");
+                return null;
+            }
+            
         } catch (Exception e) {
             log.error("❌ Error extracting LaTeX from AI response", e);
+            log.error("Response structure: {}", response);
+            return null;
         }
-        return null;
     }
     
     /**

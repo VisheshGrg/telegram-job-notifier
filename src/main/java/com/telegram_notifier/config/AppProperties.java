@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 public class AppProperties {
     private Telegram telegram = new Telegram();
     private AI ai = new AI();
-    private Sheets sheets = new Sheets();
     private Notion notion = new Notion();
     private Storage storage = new Storage();
     private Cloudinary cloudinary = new Cloudinary();
@@ -18,7 +17,6 @@ public class AppProperties {
     // Getters
     public Telegram getTelegram() { return telegram; }
     public AI getAi() { return ai; }
-    public Sheets getSheets() { return sheets; }
     public Notion getNotion() { return notion; }
     public Storage getStorage() { return storage; }
     public Cloudinary getCloudinary() { return cloudinary; }
@@ -27,7 +25,6 @@ public class AppProperties {
     // Setters
     public void setTelegram(Telegram telegram) { this.telegram = telegram; }
     public void setAi(AI ai) { this.ai = ai; }
-    public void setSheets(Sheets sheets) { this.sheets = sheets; }
     public void setNotion(Notion notion) { this.notion = notion; }
     public void setStorage(Storage storage) { this.storage = storage; }
     public void setCloudinary(Cloudinary cloudinary) { this.cloudinary = cloudinary; }
@@ -80,19 +77,6 @@ public class AppProperties {
         }
     }
 
-    public static class Sheets {
-        private String spreadsheetId = "";
-        private String sheetRange = "Sheet1!A:H";
-        private String credentialsPath = "credentials.json";
-
-        public String getSpreadsheetId() { return spreadsheetId; }
-        public String getSheetRange() { return sheetRange; }
-        public String getCredentialsPath() { return credentialsPath; }
-        public void setSpreadsheetId(String spreadsheetId) { this.spreadsheetId = spreadsheetId; }
-        public void setSheetRange(String sheetRange) { this.sheetRange = sheetRange; }
-        public void setCredentialsPath(String credentialsPath) { this.credentialsPath = credentialsPath; }
-    }
-    
     public static class Notion {
         private String integrationToken = "";
         private String databaseId = "";
@@ -107,13 +91,10 @@ public class AppProperties {
     }
     
     public static class Storage {
-        private String type = "csv"; // csv, json, sqlite, google-sheets, notion
-        private String filePath = "job_listings";
+        private String type = "notion"; // Only notion storage is supported
 
         public String getType() { return type; }
-        public String getFilePath() { return filePath; }
         public void setType(String type) { this.type = type; }
-        public void setFilePath(String filePath) { this.filePath = filePath; }
     }
     
     public static class Cloudinary {
